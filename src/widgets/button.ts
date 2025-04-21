@@ -16,6 +16,8 @@ class Button extends Widget{
     private defaultWidth: number = 80;
     private defaultHeight: number = 30;
 
+    private _onClickCallback?: () => void;
+
     constructor(parent:Window){
         super(parent);
         // set defaults
@@ -78,40 +80,58 @@ class Button extends Widget{
     }
     
     pressReleaseState(): void{
-
-        if (this.previousState instanceof PressedWidgetState)
+        if (this.previousState instanceof PressedWidgetState) {
             this.raise(new EventArgs(this));
+    
+            if (this._onClickCallback) {
+                this._onClickCallback();
+            }
+        }
     }
 
     //TODO: implement the onClick event using a callback passed as a parameter
-    onClick(/*TODO: add callback parameter*/):void{}
+    onClick(callback: () => void):void{
+        this._onClickCallback = callback;
+    }
 
     
     //TODO: give the states something to do! Use these methods to control the visual appearance of your
     //widget
+
     idleupState(): void {
-        throw new Error("Method not implemented.");
+        this.backcolor = "#e3e3e3"; // idle gray
+        this.update();
     }
+
     idledownState(): void {
-        throw new Error("Method not implemented.");
+        this.backcolor = "#cccccc"; // click-initialized
+        this.update();
     }
+
     pressedState(): void {
-        throw new Error("Method not implemented.");
+        this.backcolor = "#999999"; // fully pressed
+        this.update();
     }
+
     hoverState(): void {
-        throw new Error("Method not implemented.");
+        this.backcolor = "#bbbbbb"; // hover highlight
+        this.update();
     }
+
     hoverPressedState(): void {
-        throw new Error("Method not implemented.");
+        this.backcolor = "#888888"; // hover while pressed
+        this.update();
     }
+
     pressedoutState(): void {
-        throw new Error("Method not implemented.");
+        this.backcolor = "#666666"; // pressed but moved out
+        this.update();
     }
+
     moveState(): void {
-        throw new Error("Method not implemented.");
     }
+
     keyupState(keyEvent?: KeyboardEvent): void {
-        throw new Error("Method not implemented.");
     }
 }
 
